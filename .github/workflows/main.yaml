@@ -1,0 +1,39 @@
+name: Create Release and update README
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5.0.0
+
+      - name: Set up git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create GitHub release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          release_name: Release ${{ env.RELEASE_TAG }}
+          draft: false
+          prerelease: false
+          body: "See: https://github.com/Gridness/k8s-hooks/commits/${{ env.RELEASE_TAG }}"
+
+      - name: Update README with new tag
+        run: |
+          sed -i "s|rev: .*|rev: ${RELEASE_TAG} # updated by release action|" README.md
+
+      - name: Commit and push README update
+        run: |
+          git add README.md
+          git commit -m "chore: update rev tag to ${RELEASE_TAG} in README"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
