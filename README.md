@@ -14,12 +14,11 @@ Integrate the Kubeseal Hook in Your Project
 ```yaml
 repos:
   - repo: https://github.com/Gridness/k8s-hooks
-    rev: 1.0  # or a specific tag/commit
+    rev: 2.0  # or a specific tag/commit
     hooks:
       - id: kubeseal-secrets # or any other script you wanna run
         args: # Specify args for the hook
           - '*secret*'
-        types: [file]
 ```
 2. Install pre-commit hooks:
 ```bash
