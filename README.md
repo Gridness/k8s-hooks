@@ -25,7 +25,7 @@ repos:
 ```bash
 pre-commit install
 ```
-3. On each commit, the hook will seal any unsealed secrets matching the specified pattern.
+3. On each commit, the hook do it's job
 
 # Requirements
 - [kubeseal](https://github.com/bitnami-labs/sealed-secrets) CLI must be installed and available in your PATH
