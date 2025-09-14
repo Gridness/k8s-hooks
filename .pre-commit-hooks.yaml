@@ -1,0 +1,9 @@
+- id: kubeseal-secrets
+  name: Kubeseal secrets files
+  entry: ./kubeseal-secrets.sh
+  language: script
+  args:
+    - '*secret*'
+  description: |
+    Finds secret files matching the pattern and creates sealed secrets using kubeseal.
+  stages: [commit]
