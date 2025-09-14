@@ -17,9 +17,6 @@ repos:
     rev: main  # or a specific tag/commit
     hooks:
       - id: kubeseal-secrets # or any other script you wanna run
-        name: Kubeseal secrets files
-        entry: ./kubeseal-secrets.sh # scecify script name
-        language: script
         args: # Specify args for the hook
           - '*secret*'
         types: [file]
