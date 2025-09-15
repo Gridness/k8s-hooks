@@ -14,56 +14,54 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
 
       - name: Get current tag name
         id: current_tag
-        run: echo "current_tag=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        run: echo "current_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Get previous tag
         id: previous_tag
         run: |
           git fetch --tags
-          tags=($(git tag --sort=-creatordate))
-          current=${{ env.current_tag }}
-          prev=""
+          mapfile -t tags < <(git tag --sort=-v:refname)
+          current_index=-1
           for i in "${!tags[@]}"; do
-            if [[ "${tags[i]}" == "$current" ]]; then
-              if [[ $i -lt $((${#tags[@]} - 1)) ]]; then
-                prev=${tags[$((i + 1))]}
-              fi
+            if [[ "${tags[i]}" == "${{ env.current_tag }}" ]]; then
+              current_index=$i
               break
             fi
           done
-          echo "previous_tag=$prev" >> $GITHUB_ENV
+          if (( current_index > 0 )); then
+            echo "previous_tag=${tags[current_index-1]}" >> $GITHUB_ENV
+          else
+            echo "previous_tag=" >> $GITHUB_ENV
+          fi
 
-      - run: |
+      - name: Show tags
+        run: |
           echo "Current tag: ${{ env.current_tag }}"
-          echo "Previous tag: ${{ steps.previous_tag.outputs.previous_tag }}"
+          echo "Previous tag: ${{ env.previous_tag }}"
 
       - name: Update README with new tag
-        shell: python
-        run: |
-          import re
-          from pathlib import Path
+        uses: actions/python@v5
+        with:
+          script: |
+            import re
+            from pathlib import Path
 
-          with Path("README.md").open("r") as f:
-              content = f.read()
+            with Path("README.md").open("r") as f:
+                content = f.read()
 
-          current_tag = ${{ env.CURRENT_TAG }}
+            new_content = re.sub(
+                r"(rev:\s*)([\w\.]+)",
+                r"\1${{ env.current_tag }}",
+                content,
+            )
 
-          def replace_rev(matches):
-              lines = matches.group(0).split("\n")
-              for i, line in enumerate(lines):
-                  if re.search(r"\s*rev:\s*.+$", line):
-                      lines[i] = f"    rev: {current_tag}  # or a specific tag/commit"
-              return "\n".join(lines)
-          
-          updated_rev_exapmple = re.sub(r'``````', replace_rev, content, flags=re.DOTALL)
-
-          with Path("README.md", "w") as f:
-              f.write(updated_rev_exapmple)
-
-          print("Updated README with current tag revision")
+            with Path("README.md").open("w") as f:
+                f.write(new_content)
 
       - name: Configure git user
         run: |
@@ -73,17 +71,15 @@ jobs:
       - name: Commit and push README update
         run: |
           git add README.md
-          git commit -m "chore: update rev tag to ${{ env.CURRENT_TAG }} in README"
+          git commit -m "chore: update rev tag to ${{ env.current_tag }} in README"
           git push origin main
 
       - name: Create GitHub release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.current_tag }}
           release_name: ${{ env.current_tag }}
-          draft: false
-          prerelease: false
           body: | 
-            See: [https://github.com/Gridness/k8s-hooks/commits/${{ env.previous_tag }}..${{ env.current_tag }}](https://github.com/Gridness/k8s-hooks/commits/${{ env.previous_tag }}..${{ env.current_tag }})
+            See: https://github.com/${{ github.repository }}/compare/${{ env.previous_tag }}...${{ env.current_tag }}
