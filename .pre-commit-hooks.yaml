@@ -1,5 +1,4 @@
-hooks:
-  - id: kubeseal-secrets
+- id: kubeseal-secrets
     name: Kubeseal secrets files
     description: |
       Finds secret files matching the pattern and creates sealed secrets using kubeseal.
