@@ -1,7 +1,13 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "k8s-hooks"
-version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.12"
-dependencies = []
+version = "1.0.0"
+description = "Collection of pre-commit hooks for Kubernetes"
+authors = [{name = "Ivan", email = "gridness@icloud.com"}]
+
+[tool.setuptools.packages.find]
+include = ["hooks*"]
+
