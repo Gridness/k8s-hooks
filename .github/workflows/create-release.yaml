@@ -17,6 +17,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Get current tag name
         id: current_tag
         run: echo "current_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
@@ -45,23 +50,21 @@ jobs:
           echo "Previous tag: ${{ env.previous_tag }}"
 
       - name: Update README with new tag
-        uses: actions/python@v5
-        with:
-          script: |
-            import re
-            from pathlib import Path
-
-            with Path("README.md").open("r") as f:
-                content = f.read()
-
-            new_content = re.sub(
-                r"(rev:\s*)([\w\.]+)",
-                r"\1${{ env.current_tag }}",
-                content,
-            )
-
-            with Path("README.md").open("w") as f:
-                f.write(new_content)
+        shell: bash
+        run: |
+          python -c "
+          import re
+          with open('README.md', 'r') as f:
+              content = f.read()
+          # Replace revision patterns (adjust regex as needed for your README)
+          new_content = re.sub(
+              r'(rev:\s*)[\w\.\-]+',  # Matches 'rev: ' followed by version digits/dots/dashes
+              r'\1${{ env.current_tag }}',
+              content
+          )
+          with open('README.md', 'w') as f:
+              f.write(new_content)
+          "
 
       - name: Configure git user
         run: |
