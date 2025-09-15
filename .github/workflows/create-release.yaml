@@ -5,7 +5,8 @@ on:
     tags:
       - "*.*.*"
       - "*.*"
-  workflow_dispatch:
+    branches:
+      - "cicd/workflows/create-release/fix-pipe"
 
 jobs:
   release:
