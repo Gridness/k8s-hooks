@@ -69,7 +69,7 @@ def seal_secrets(files, controller_name, controller_namespace):
         print("\nAll done: no failures.")
         sys.exit(0)
 
-if name == "__main__":
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Seal Kubernetes secrets using kubeseal")
     parser.add_argument("--controller-name", required=True, help="Name of the sealed secrets controller")
     parser.add_argument("--controller-namespace", required=True, help="Namespace of the sealed secrets controller")
