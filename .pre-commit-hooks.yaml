@@ -1,11 +1,12 @@
-- id: kubeseal-secrets
-  name: Kubeseal secrets files
-  description: |
-    Finds secret files matching the pattern and creates sealed secrets using kubeseal.
-  entry: python3 -m hooks.kubeseal-secrets.kubeseal-secrets
-  language: python
-  args:
-    - --controller-name=sealed-secrets
-    - --controller-namespace=sealed-secrets
-  pass_filenames: true
-  files: "secret.*\\.(yaml|yml)$"
+hooks:
+  - id: kubeseal-secrets
+    name: Kubeseal secrets files
+    description: |
+      Finds secret files matching the pattern and creates sealed secrets using kubeseal.
+    entry: python3 -m hooks.kubeseal-secrets.kubeseal-secrets
+    language: python
+    args:
+      - --controller-name=sealed-secrets
+      - --controller-namespace=sealed-secrets
+    pass_filenames: true
+    files: "secret.*\.(yaml|yml)$"
