@@ -12,7 +12,7 @@ def seal_secrets(files, controller_name, controller_namespace):
             print(f"Warning: File {file} does not exist, skipping")
             continue
 
-        if ".sealed." in file.name and file.exists():
+        if ".sealed." in file.name:
             print(f"File is already sealed: {file}, skipping")
             continue
 
@@ -23,7 +23,7 @@ def seal_secrets(files, controller_name, controller_namespace):
             "--controller-namespace", controller_namespace,
         ]
 
-        sealed_file = Path(file.suffix + ".sealed.yaml")
+        sealed_file = file.with_name(f"{file.stem}.sealed{file.suffix}")
 
         try:
             with Path(file).open("rb") as f:
