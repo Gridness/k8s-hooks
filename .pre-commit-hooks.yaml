@@ -3,7 +3,7 @@
   description: |
     Finds secret files matching the pattern and creates sealed secrets using kubeseal.
   entry: python3 ./hooks/kubeseal-secrets/kubeseal-secrets.py
-  language: python
+  language: system
   args:
     - --controller-name=sealed-secrets
     - --controller-namespace=sealed-secrets
