@@ -1,9 +1,9 @@
 - id: kubeseal-secrets
   name: Kubeseal secrets files
   entry: python3 ./kubeseal-secrets.py
-  language: system
+  language: python
   args:
-    - '*secret*'
+    - "*secret*"
   description: |
     Finds secret files matching the pattern and creates sealed secrets using kubeseal.
   stages: [commit]
