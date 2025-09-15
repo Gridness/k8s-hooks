@@ -11,10 +11,9 @@ def seal_secrets(files, controller_name, controller_namespace):
         if not file.exists():
             print(f"Warning: File {file} does not exist, skipping")
             continue
-            
-        sealed_file = file.with_suffix(file.suffix + ".sealed.yaml")
-        if sealed_file.exists():
-            print(f"Sealed file already exists: {sealed_file}, skipping")
+
+        if ".sealed." in file.name and file.exists():
+            print(f"File is already sealed: {file}, skipping")
             continue
 
         kubeseal_cmd = [
