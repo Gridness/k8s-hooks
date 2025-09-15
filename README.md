@@ -16,7 +16,7 @@ Integrate the Kubeseal Hook in Your Project
 ```yaml
 repos:
   - repo: https://github.com/Gridness/k8s-hooks
-    rev: 2.0          # or a specific tag/commit
+    rev: 1.0          # or a specific tag/commit
     hooks:
       - id: hook-id   # id of the hook
         args: [""]    # list of args of the chosen hook
