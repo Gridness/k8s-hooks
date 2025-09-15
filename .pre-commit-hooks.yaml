@@ -8,5 +8,4 @@
     - --controller-name=sealed-secrets
     - --controller-namespace=sealed-secrets
   pass_filenames: true
-  files: "*secret*.(yaml|yml)$"
-  stages: [commit]
+  files: ".*secret.*\\.(yaml|yml)$"
