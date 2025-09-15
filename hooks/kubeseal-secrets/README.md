@@ -6,7 +6,7 @@ You can specify regex pattern by which the script will look for secrets files in
 ```yaml
 repos:
   - repo: https://github.com/Gridness/k8s-hooks
-    rev: 3.0  # or a specific tag/commit
+    rev: 1.0  # or a specific tag/commit
     hooks:
       - id: kubeseal-secrets
         args: # you can ommit these values if you want to use the default ones listed below
