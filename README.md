@@ -14,11 +14,11 @@ Integrate the Kubeseal Hook in Your Project
 ```yaml
 repos:
   - repo: https://github.com/Gridness/k8s-hooks
-    rev: 2.0  # or a specific tag/commit
+    rev: 2.0          # or a specific tag/commit
     hooks:
-      - id: kubeseal-secrets # or any other script you wanna run
-        args: # Specify args for the hook
-          - '*secret*'
+      - id: hook-id   # id of the hook
+        args: [""]    # list of args of the chosen hook
+        files: [""]   # list of files the hook gonna run over (if supported)
 ```
 2. Install pre-commit hooks:
 ```bash
@@ -27,11 +27,10 @@ pre-commit install
 3. On each commit, the hook do it's job
 
 # Requirements
-- [kubeseal](https://github.com/bitnami-labs/sealed-secrets) CLI must be installed and available in your PATH
 - [pre-commit](https://pre-commit.com/) framework installed in your local environment
 
 # Contributing
 Contributions to add new hooks, improve existing ones, or fix issues are welcome! Please open issues or pull requests.
 
 # License
-This repository is licensed under the MIT License
+This repository is licensed under the MIT License. See LICENSE file for details

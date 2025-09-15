@@ -1,10 +1,12 @@
 - id: kubeseal-secrets
   name: Kubeseal secrets files
-  entry: python3 ./kubeseal-secrets.py
-  language: python
-  args:
-    - "*secret*"
   description: |
     Finds secret files matching the pattern and creates sealed secrets using kubeseal.
+  entry: python3 ./hooks/kubeseal-secrets/kubeseal-secrets.py
+  language: python
+  args:
+    - --controller-name=sealed-secrets
+    - --controller-namespace=sealed-secrets
+  pass_filenames: true
+  files: "*secret*.(yaml|yml)$"
   stages: [commit]
-  pass_filenames: false
