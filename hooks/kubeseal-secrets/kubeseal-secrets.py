@@ -23,7 +23,7 @@ def seal_secrets(files, controller_name, controller_namespace):
             "--controller-namespace", controller_namespace,
         ]
 
-        sealed_file = file.suffix + ".sealed.yaml"
+        sealed_file = Path(file.suffix + ".sealed.yaml")
 
         try:
             with Path(file).open("rb") as f:
