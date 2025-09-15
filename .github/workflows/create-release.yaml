@@ -35,7 +35,7 @@ jobs:
       - name: Show tags
         run: |
           echo "Current tag: ${{ env.current_tag }}"
-          echo "Previous tag: ${{ env.previous_tag }}"
+          echo "Previous tag: ${{ steps.previous_tag.outputs.tag }}"
 
       - name: Update README with new tag
         shell: bash
@@ -74,4 +74,4 @@ jobs:
           tag_name: ${{ env.current_tag }}
           release_name: ${{ env.current_tag }}
           body: | 
-            See: https://github.com/${{ github.repository }}/compare/${{ env.previous_tag }}...${{ env.current_tag }}
+            ${{ steps.previous_tag.outputs.tag != 'v0.0.0' && format('See: https://github.com/{1}/compare/{0}...{2}', steps.previous_tag.outputs.tag, github.repository, env.current_tag) || 'Initial release' }}
