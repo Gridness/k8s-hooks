@@ -1,4 +1,6 @@
 # Kubernetes Hooks
+[![Dependabot Updates](https://github.com/Gridness/k8s-hooks/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/Gridness/k8s-hooks/actions/workflows/dependabot/dependabot-updates)
+
 This repository contains reusable Kubernetes-related Git hooks that simplify management of k8s resources manifests. Particularly useful for any gitops repositories
 
 # Available Hooks

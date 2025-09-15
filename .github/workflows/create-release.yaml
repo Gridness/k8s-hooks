@@ -28,21 +28,9 @@ jobs:
 
       - name: Get previous tag
         id: previous_tag
-        run: |
-          git fetch --tags
-          mapfile -t tags < <(git tag --sort=-v:refname)
-          current_index=-1
-          for i in "${!tags[@]}"; do
-            if [[ "${tags[i]}" == "${{ env.current_tag }}" ]]; then
-              current_index=$i
-              break
-            fi
-          done
-          if (( current_index > 0 )); then
-            echo "previous_tag=${tags[current_index-1]}" >> $GITHUB_ENV
-          else
-            echo "previous_tag=" >> $GITHUB_ENV
-          fi
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+        with:
+          fallback: 2.0
 
       - name: Show tags
         run: |
@@ -54,16 +42,17 @@ jobs:
         run: |
           python -c "
           import re
+          current_tag = '${{ env.current_tag }}'
           with open('README.md', 'r') as f:
               content = f.read()
-          # Replace revision patterns (adjust regex as needed for your README)
           new_content = re.sub(
-              r'(rev:\s*)[\w\.\-]+',  # Matches 'rev: ' followed by version digits/dots/dashes
-              r'\1${{ env.current_tag }}',
+              r'(rev:\s*)[\w\.\-]+',
+              lambda m: m.group(1) + current_tag,
               content
           )
           with open('README.md', 'w') as f:
               f.write(new_content)
+          print('Updated README with current tag revision')
           "
 
       - name: Configure git user
