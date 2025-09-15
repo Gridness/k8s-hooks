@@ -54,16 +54,17 @@ jobs:
         run: |
           python -c "
           import re
+          current_tag = '${{ env.current_tag }}'
           with open('README.md', 'r') as f:
               content = f.read()
-          # Replace revision patterns (adjust regex as needed for your README)
           new_content = re.sub(
-              r'(rev:\s*)[\w\.\-]+',  # Matches 'rev: ' followed by version digits/dots/dashes
-              r'\1${{ env.current_tag }}',
+              r'(rev:\s*)[\w\.\-]+',
+              lambda m: m.group(1) + current_tag,
               content
           )
           with open('README.md', 'w') as f:
               f.write(new_content)
+          print('Updated README with current tag revision')
           "
 
       - name: Configure git user
